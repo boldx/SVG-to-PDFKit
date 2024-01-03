@@ -2663,7 +2663,15 @@ This implementation of SVG is incomplete and can only accept 2 absolute value or
         }
       })(this);
       this.getTransformation = function() {
-        return this.get('transform');
+        const [transformOriginX, transformOriginY] = this.get('transform-origin')(
+          this.getLength('width', this.getVWidth(), 0),
+          this.getLength('height', this.getVHeight(), 0)
+        );
+
+        return multiplyMatrix(
+          [1, 0, 0, 1, transformOriginX, transformOriginY],
+          this.get('transform'),
+          [1, 0, 0, 1, -transformOriginX, -transformOriginY]);
       };
       this.drawInDocument = function(isClip, isMask) {
         doc.save();
