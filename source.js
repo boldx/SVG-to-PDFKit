@@ -594,19 +594,19 @@ var SVGtoPDF = function(doc, svg, x, y, options) {
       let parser = new StringParser((v || '').trim());
 
       // check for 2 absolute values
-      const matchedAbsolute = parser.match(/^\d*\s\d*$/, true);
+      const matchedAbsolute = parser.match(/^[+-]?([0-9]*[.])?[0-9]+(px)?\s[+-]?([0-9]*[.])?[0-9]+(px)?$/, true);
       if (matchedAbsolute){
         const matches = matchedAbsolute[0].split(' ');
-        return (x, y) => [parseInt(matches[0]), parseInt(matches[1])];
+        return (x, y) => [parseFloat(matches[0]), parseFloat(matches[1])];
       }
       
       // check for 2 percentage values
-      const matchedPercents = parser.match(/^\d*% \d*%$/, true);
+      const matchedPercents = parser.match(/^[+-]?([0-9]*[.])?[0-9]+% \[+-]?([0-9]*[.])?[0-9]+%$/, true);
       if (matchedPercents){
         const matches = matchedPercents[0].split(' ');
         return (x, y) => [
-          x * (parseInt(matches[0].slice(0, -1)) / 100), 
-          y * (parseInt(matches[1].slice(0, -1)) / 100)
+          x * (parseFloat(matches[0].slice(0, -1)) / 100), 
+          y * (parseFloat(matches[1].slice(0, -1)) / 100)
         ];
       }
 
